@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&family=Raleway:wght@100;200;300&family=Space+Mono:wght@400&family=Cormorant+Garamond:wght@300;400&family=Orbitron:wght@300;400&family=Caveat:wght@400;500&family=Bebas+Neue&family=Lora:wght@400&family=Fira+Code:wght@300;400&family=Dancing+Script:wght@400;500&family=Montserrat:wght@100;200;300&family=Merriweather:wght@300&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ---- Layers ---- */
+
+.wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition: background 1.5s ease;
+}
+
+body.has-wallpaper .overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(3px);
+}
+
+/* ---- Content ---- */
+
+.container {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  animation: fadeIn 1s ease-out;
+}
+
+/* ---- Time box ---- */
+
+.time-box {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.5rem;
+  padding: 2.5rem 3.5rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  min-width: 320px;
+}
+
+.time-text {
+  font-size: clamp(1.6rem, 5vw, 3.8rem);
+  font-weight: 200;
+  line-height: 1.3;
+  max-width: 80vw;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- Controls ---- */
+
+.controls {
+  margin-top: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.control-select {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2rem;
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  padding: 0.45rem 2rem 0.45rem 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.3s, border-color 0.3s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+}
+
+.control-select:hover,
+.control-select:focus {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.control-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.control-btn {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2rem;
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============ THEMES ============ */
+
+/* Aurora Borealis — Raleway thin */
+body.t-aurora .overlay {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 255, 170, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 180, 255, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(100, 0, 255, 0.15) 0%, transparent 50%),
+    linear-gradient(to bottom, #020b1a 0%, #0a1628 30%, #111d32 60%, #0d1520 100%);
+}
+body.t-aurora .time-text { font-family: 'Raleway', sans-serif; font-weight: 100; letter-spacing: 0.04em; }
+
+/* Sunset Beach — Playfair Display */
+body.t-sunset .overlay {
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(255, 120, 50, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 60%, rgba(255, 80, 120, 0.25) 0%, transparent 50%),
+    linear-gradient(to bottom, #1a0533 0%, #4a1942 25%, #c0392b 60%, #f39c12 90%, #f5d76e 100%);
+}
+body.t-sunset .time-text { font-family: 'Playfair Display', serif; font-weight: 300; letter-spacing: 0.02em; }
+
+/* Deep Ocean — Montserrat ultralight */
+body.t-ocean .overlay {
+  background:
+    radial-gradient(ellipse at 50% 120%, rgba(0, 210, 255, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 30%, rgba(0, 80, 180, 0.3) 0%, transparent 50%),
+    linear-gradient(to bottom, #001a33 0%, #003366 30%, #004080 60%, #001a33 100%);
+}
+body.t-ocean .time-text { font-family: 'Montserrat', sans-serif; font-weight: 100; letter-spacing: 0.06em; }
+
+/* Enchanted Forest — Cormorant Garamond */
+body.t-forest .overlay {
+  background:
+    radial-gradient(ellipse at 30% 90%, rgba(80, 200, 120, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(34, 139, 34, 0.2) 0%, transparent 50%),
+    linear-gradient(to bottom, #0a1f0a 0%, #132a13 30%, #1e3d1e 60%, #0d1a0d 100%);
+}
+body.t-forest .time-text { font-family: 'Cormorant Garamond', serif; font-weight: 300; letter-spacing: 0.03em; }
+
+/* Starry Night — Space Mono */
+body.t-starry .overlay {
+  background:
+    radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 30% 65%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 55% 15%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 70% 45%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 85% 70%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 45% 85%, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 15% 50%, rgba(255,255,255,0.6) 50%, transparent 100%),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.6) 50%, transparent 100%),
+    linear-gradient(to bottom, #05050f 0%, #0a0a2e 40%, #10103a 70%, #050515 100%);
+}
+body.t-starry .time-text { font-family: 'Space Mono', monospace; font-weight: 400; letter-spacing: 0.02em; }
+
+/* Sakura — Dancing Script */
+body.t-sakura .overlay {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(219, 112, 147, 0.25) 0%, transparent 50%),
+    linear-gradient(to bottom, #2d0a1e 0%, #5c1a3a 30%, #8b3a62 60%, #3d1428 100%);
+}
+body.t-sakura .time-text { font-family: 'Dancing Script', cursive; font-weight: 500; letter-spacing: 0.01em; }
+body.t-sakura .time-text { font-size: clamp(1.8rem, 5.5vw, 4rem); }
+
+/* Golden Hour — Bebas Neue */
+body.t-golden .overlay {
+  background:
+    radial-gradient(ellipse at 50% 80%, rgba(255, 200, 50, 0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 30%, rgba(180, 100, 0, 0.25) 0%, transparent 50%),
+    linear-gradient(to bottom, #1a0f00 0%, #3d2200 25%, #7a4400 55%, #c47c00 80%, #e6a817 100%);
+}
+body.t-golden .time-text { font-family: 'Bebas Neue', sans-serif; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* Arctic Frost — Lora */
+body.t-arctic .overlay {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(200, 230, 255, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(150, 210, 240, 0.2) 0%, transparent 50%),
+    linear-gradient(to bottom, #d4e9f7 0%, #a8d4ee 30%, #7ec8e3 60%, #c5dff0 100%);
+}
+body.t-arctic { color: #1e3a5f; }
+body.t-arctic .time-box {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 80, 140, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+body.t-arctic .time-text { font-family: 'Lora', serif; font-weight: 400; letter-spacing: 0.02em; text-shadow: 0 1px 10px rgba(255, 255, 255, 0.4); }
+body.t-arctic .control-select,
+body.t-arctic .control-btn {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 60, 120, 0.2);
+  color: #1e3a5f;
+}
+body.t-arctic .control-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%231e3a5f' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* Ember Glow — Fira Code */
+body.t-ember .overlay {
+  background:
+    radial-gradient(ellipse at 50% 70%, rgba(255, 80, 0, 0.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 40%, rgba(200, 0, 0, 0.2) 0%, transparent 50%),
+    linear-gradient(to bottom, #0f0000 0%, #2a0505 25%, #4a0e0e 50%, #6b1a1a 75%, #1a0505 100%);
+}
+body.t-ember .time-text { font-family: 'Fira Code', monospace; font-weight: 300; letter-spacing: 0.03em; }
+
+/* Lavender Dreams — Caveat */
+body.t-lavender .overlay {
+  background:
+    radial-gradient(ellipse at 40% 30%, rgba(180, 130, 255, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(140, 80, 220, 0.2) 0%, transparent 50%),
+    linear-gradient(to bottom, #1a0a2e 0%, #2d1650 30%, #4a2080 60%, #1f0d35 100%);
+}
+body.t-lavender .time-text { font-family: 'Caveat', cursive; font-weight: 500; letter-spacing: 0.02em; }
+body.t-lavender .time-text { font-size: clamp(2rem, 6vw, 4.2rem); }
+
+/* Midnight City — Orbitron */
+body.t-midnight .overlay {
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(40, 50, 80, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(60, 40, 20, 0.15) 0%, transparent 40%),
+    linear-gradient(to bottom, #020617 0%, #0a0f1e 30%, #111827 60%, #070b14 100%);
+}
+body.t-midnight .time-text { font-family: 'Orbitron', sans-serif; font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Tropical — Merriweather */
+body.t-tropical .overlay {
+  background:
+    radial-gradient(ellipse at 30% 80%, rgba(0, 200, 150, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 20%, rgba(0, 150, 200, 0.25) 0%, transparent 50%),
+    linear-gradient(to bottom, #002a2a 0%, #004040 30%, #006060 55%, #003535 80%, #001a1a 100%);
+}
+body.t-tropical .time-text { font-family: 'Merriweather', serif; font-weight: 300; letter-spacing: 0.02em; }
+
+/* ---- Animation ---- */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

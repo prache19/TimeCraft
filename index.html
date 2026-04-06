@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TimeCraft</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="wallpaper" class="wallpaper"></div>
+  <div class="overlay"></div>
+  <main class="container">
+    <div class="time-box">
+      <h1 id="time-text" class="time-text"></h1>
+    </div>
+    <div class="controls">
+      <select id="lang-select" class="control-select"></select>
+      <select id="theme-select" class="control-select"></select>
+      <label class="control-btn">
+        <input type="file" id="wallpaper-input" accept="image/*" hidden>
+        Wallpaper
+      </label>
+      <button id="clear-wallpaper" class="control-btn" style="display:none">Clear</button>
+    </div>
+  </main>
+
+  <!-- Language files — add/remove/reorder as needed -->
+  <script src="langs/en.js"></script>
+  <script src="langs/zh.js"></script>
+  <script src="langs/hi.js"></script>
+  <script src="langs/es.js"></script>
+  <script src="langs/fr.js"></script>
+  <script src="langs/ar.js"></script>
+  <script src="langs/bn.js"></script>
+  <script src="langs/pt.js"></script>
+  <script src="langs/ru.js"></script>
+  <script src="langs/ja.js"></script>
+  <script src="langs/de.js"></script>
+  <script src="langs/ko.js"></script>
+  <script src="langs/tr.js"></script>
+  <script src="langs/vi.js"></script>
+  <script src="langs/it.js"></script>
+  <script src="langs/th.js"></script>
+  <script src="langs/pl.js"></script>
+  <script src="langs/nl.js"></script>
+  <script src="langs/sw.js"></script>
+  <script src="langs/id.js"></script>
+
+  <!-- Main app (must load after language files) -->
+  <script src="script.js"></script>
+</body>
+</html>

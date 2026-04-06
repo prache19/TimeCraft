@@ -1,6 +1,7 @@
 // ============================================================
 // TimeCraft – main app
 // Reads languages from window.TimeCraftLangs (populated by langs/*.js)
+// Each lang.format(h, m) returns { main: "...", extra: "..." }
 // ============================================================
 
 const languages = window.TimeCraftLangs || [];
@@ -20,18 +21,16 @@ const themeList = [
   { name: "Tropical", cls: "t-tropical" }
 ];
 
-// ============================================================
 // DOM
-// ============================================================
-
 const timeTextEl = document.getElementById("time-text");
+const timeExtraEl = document.getElementById("time-extra");
 const langSelect = document.getElementById("lang-select");
 const themeSelect = document.getElementById("theme-select");
 const wallpaperInput = document.getElementById("wallpaper-input");
 const wallpaperEl = document.getElementById("wallpaper");
 const clearBtn = document.getElementById("clear-wallpaper");
 
-// Populate language dropdown from registered languages
+// Populate dropdowns
 languages.forEach((lang, i) => {
   const opt = document.createElement("option");
   opt.value = i;
@@ -39,7 +38,6 @@ languages.forEach((lang, i) => {
   langSelect.appendChild(opt);
 });
 
-// Populate theme dropdown
 themeList.forEach((t, i) => {
   const opt = document.createElement("option");
   opt.value = i;
@@ -47,10 +45,7 @@ themeList.forEach((t, i) => {
   themeSelect.appendChild(opt);
 });
 
-// ============================================================
 // Persistence
-// ============================================================
-
 const LANG_KEY = "timecraft-lang";
 const THEME_KEY = "timecraft-theme";
 const WP_KEY = "timecraft-wallpaper";
@@ -61,19 +56,13 @@ if (sL !== null && sL < languages.length) langSelect.value = sL;
 const sT = localStorage.getItem(THEME_KEY);
 if (sT !== null && sT < themeList.length) themeSelect.value = sT;
 
-// ============================================================
 // Appearance
-// ============================================================
-
 function applyAppearance() {
   const hasWp = wallpaperEl.style.backgroundImage !== "";
   document.body.className = themeList[themeSelect.value].cls + (hasWp ? " has-wallpaper" : "");
 }
 
-// ============================================================
 // Wallpaper
-// ============================================================
-
 function setWallpaper(dataUrl) {
   wallpaperEl.style.backgroundImage = 'url("' + dataUrl + '")';
   clearBtn.style.display = "inline-block";
@@ -104,10 +93,7 @@ wallpaperInput.addEventListener("change", function () {
 
 clearBtn.addEventListener("click", removeWallpaper);
 
-// ============================================================
 // Events
-// ============================================================
-
 langSelect.addEventListener("change", () => {
   localStorage.setItem(LANG_KEY, langSelect.value);
   lastMinute = -1;
@@ -119,10 +105,7 @@ themeSelect.addEventListener("change", () => {
   applyAppearance();
 });
 
-// ============================================================
 // Update loop
-// ============================================================
-
 let lastMinute = -1;
 
 function updateDisplay() {
@@ -134,7 +117,9 @@ function updateDisplay() {
     lastMinute = m;
     const lang = languages[langSelect.value];
     if (lang) {
-      timeTextEl.textContent = lang.format(h, m);
+      const result = lang.format(h, m);
+      timeTextEl.textContent = result.main;
+      timeExtraEl.textContent = result.extra || "";
     }
   }
 }

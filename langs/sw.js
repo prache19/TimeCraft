@@ -5,26 +5,32 @@ window.TimeCraftLangs.push((() => {
   function swHr(h) { return (((h % 12 || 12) + 6) % 12) || 12; }
   function hw(h) { return ones[swHr(h)]; }
   function snap(m) {
-    if (m <= 7)  return { base: 0,  off: m };
-    if (m <= 22) return { base: 15, off: m - 15 };
-    if (m <= 37) return { base: 30, off: m - 30 };
-    if (m <= 52) return { base: 45, off: m - 45 };
-    return { base: 60, off: m - 60 };
+    const base = Math.floor(m / 5) * 5;
+    return { base: base, off: m - base };
   }
   function extra(off) {
     if (off === 0) return "";
-    return (off > 0 ? "+" : "") + off + " dakika";
+    return "+" + off + " dakika";
   }
   return {
     name: "Kiswahili", flag: "\ud83c\uddf9\ud83c\uddff",
     format(h, m) {
       const s = snap(m), nH = (h + 1) % 24;
       let main;
-      if (s.base === 0)       main = "Saa " + hw(h) + " kamili";
-      else if (s.base === 15) main = "Saa " + hw(h) + " na robo";
-      else if (s.base === 30) main = "Saa " + hw(h) + " na nusu";
-      else if (s.base === 45) main = "Saa " + hw(nH) + " kasorobo";
-      else                    main = "Saa " + hw(nH) + " kamili";
+      switch (s.base) {
+        case 0:  main = "Saa " + hw(h) + " kamili"; break;
+        case 5:  main = "Saa " + hw(h) + " na dakika tano"; break;
+        case 10: main = "Saa " + hw(h) + " na dakika kumi"; break;
+        case 15: main = "Saa " + hw(h) + " na robo"; break;
+        case 20: main = "Saa " + hw(h) + " na dakika ishirini"; break;
+        case 25: main = "Saa " + hw(h) + " na dakika ishirini na tano"; break;
+        case 30: main = "Saa " + hw(h) + " na nusu"; break;
+        case 35: main = "Saa " + hw(nH) + " kasoro dakika ishirini na tano"; break;
+        case 40: main = "Saa " + hw(nH) + " kasoro dakika ishirini"; break;
+        case 45: main = "Saa " + hw(nH) + " kasorobo"; break;
+        case 50: main = "Saa " + hw(nH) + " kasoro dakika kumi"; break;
+        case 55: main = "Saa " + hw(nH) + " kasoro dakika tano"; break;
+      }
       return { main: main, extra: extra(s.off) };
     }
   };

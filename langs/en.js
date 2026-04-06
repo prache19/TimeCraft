@@ -8,19 +8,15 @@ window.TimeCraftLangs.push((() => {
 
   function hourWord(h) { return ones[h % 12 || 12]; }
 
-  // snap to nearest landmark: 0, 15, 30, 45, 60
   function snap(m) {
-    if (m <= 7)  return { base: 0,  off: m };
-    if (m <= 22) return { base: 15, off: m - 15 };
-    if (m <= 37) return { base: 30, off: m - 30 };
-    if (m <= 52) return { base: 45, off: m - 45 };
-    return { base: 60, off: m - 60 };
+    const base = Math.floor(m / 5) * 5;
+    return { base: base, off: m - base };
   }
 
   function extraText(off) {
     if (off === 0) return "";
-    if (off === 1 || off === -1) return (off > 0 ? "+" : "") + off + " minute";
-    return (off > 0 ? "+" : "") + off + " minutes";
+    if (off === 1) return "+1 minute";
+    return "+" + off + " minutes";
   }
 
   return {
@@ -30,11 +26,20 @@ window.TimeCraftLangs.push((() => {
       const s = snap(m);
       const nextH = (h + 1) % 24;
       let main;
-      if (s.base === 0)       main = "It is " + hourWord(h) + " o\u2019clock";
-      else if (s.base === 15) main = "It is quarter past " + hourWord(h);
-      else if (s.base === 30) main = "It is half past " + hourWord(h);
-      else if (s.base === 45) main = "It is quarter to " + hourWord(nextH);
-      else                    main = "It is " + hourWord(nextH) + " o\u2019clock";
+      switch (s.base) {
+        case 0:  main = "It is " + hourWord(h) + " o\u2019clock"; break;
+        case 5:  main = "It is five past " + hourWord(h); break;
+        case 10: main = "It is ten past " + hourWord(h); break;
+        case 15: main = "It is quarter past " + hourWord(h); break;
+        case 20: main = "It is twenty past " + hourWord(h); break;
+        case 25: main = "It is twenty-five past " + hourWord(h); break;
+        case 30: main = "It is half past " + hourWord(h); break;
+        case 35: main = "It is twenty-five to " + hourWord(nextH); break;
+        case 40: main = "It is twenty to " + hourWord(nextH); break;
+        case 45: main = "It is quarter to " + hourWord(nextH); break;
+        case 50: main = "It is ten to " + hourWord(nextH); break;
+        case 55: main = "It is five to " + hourWord(nextH); break;
+      }
       return { main: main, extra: extraText(s.off) };
     }
   };

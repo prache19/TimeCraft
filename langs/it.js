@@ -6,27 +6,33 @@ window.TimeCraftLangs.push((() => {
   function hw(h) { return ones[hr(h)]; }
   function verb(h) { return hr(h) === 1 ? "\u00c8 l'" : "Sono le "; }
   function snap(m) {
-    if (m <= 7)  return { base: 0,  off: m };
-    if (m <= 22) return { base: 15, off: m - 15 };
-    if (m <= 37) return { base: 30, off: m - 30 };
-    if (m <= 52) return { base: 45, off: m - 45 };
-    return { base: 60, off: m - 60 };
+    const base = Math.floor(m / 5) * 5;
+    return { base: base, off: m - base };
   }
   function extra(off) {
     if (off === 0) return "";
-    if (off === 1 || off === -1) return (off > 0 ? "+" : "") + off + " minuto";
-    return (off > 0 ? "+" : "") + off + " minuti";
+    if (off === 1) return "+1 minuto";
+    return "+" + off + " minuti";
   }
   return {
     name: "Italiano", flag: "\ud83c\uddee\ud83c\uddf9",
     format(h, m) {
       const s = snap(m), nH = (h + 1) % 24;
       let main;
-      if (s.base === 0)       main = verb(h) + hw(h) + " in punto";
-      else if (s.base === 15) main = verb(h) + hw(h) + " e un quarto";
-      else if (s.base === 30) main = verb(h) + hw(h) + " e mezza";
-      else if (s.base === 45) main = verb(nH) + hw(nH) + " meno un quarto";
-      else                    main = verb(nH) + hw(nH) + " in punto";
+      switch (s.base) {
+        case 0:  main = verb(h) + hw(h) + " in punto"; break;
+        case 5:  main = verb(h) + hw(h) + " e cinque"; break;
+        case 10: main = verb(h) + hw(h) + " e dieci"; break;
+        case 15: main = verb(h) + hw(h) + " e un quarto"; break;
+        case 20: main = verb(h) + hw(h) + " e venti"; break;
+        case 25: main = verb(h) + hw(h) + " e venticinque"; break;
+        case 30: main = verb(h) + hw(h) + " e mezza"; break;
+        case 35: main = verb(nH) + hw(nH) + " meno venticinque"; break;
+        case 40: main = verb(nH) + hw(nH) + " meno venti"; break;
+        case 45: main = verb(nH) + hw(nH) + " meno un quarto"; break;
+        case 50: main = verb(nH) + hw(nH) + " meno dieci"; break;
+        case 55: main = verb(nH) + hw(nH) + " meno cinque"; break;
+      }
       return { main: main, extra: extra(s.off) };
     }
   };

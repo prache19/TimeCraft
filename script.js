@@ -18,7 +18,11 @@ const themeList = [
   { name: "Ember Glow", cls: "t-ember" },
   { name: "Lavender Dreams", cls: "t-lavender" },
   { name: "Midnight City", cls: "t-midnight" },
-  { name: "Tropical", cls: "t-tropical" }
+  { name: "Tropical", cls: "t-tropical" },
+  { name: "Mountain Peaks", cls: "t-mountain" },
+  { name: "City Skyline", cls: "t-city" },
+  { name: "Ocean Waves", cls: "t-waves" },
+  { name: "Desert Dunes", cls: "t-desert" }
 ];
 
 // DOM
@@ -119,7 +123,10 @@ function updateDisplay() {
     if (lang) {
       const result = lang.format(h, m);
       timeTextEl.textContent = result.main;
-      timeExtraEl.textContent = result.extra || "";
+      // Always show extra offset as positive
+      let extra = result.extra || "";
+      extra = extra.replace(/^-/, "+");
+      timeExtraEl.textContent = extra;
     }
   }
 }
@@ -127,3 +134,10 @@ function updateDisplay() {
 applyAppearance();
 updateDisplay();
 setInterval(updateDisplay, 1000);
+
+// Reset selections on page close
+window.addEventListener("beforeunload", () => {
+  localStorage.removeItem(LANG_KEY);
+  localStorage.removeItem(THEME_KEY);
+  localStorage.removeItem(WP_KEY);
+});

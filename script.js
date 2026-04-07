@@ -28,11 +28,14 @@ const themeList = [
 // DOM
 const timeTextEl = document.getElementById("time-text");
 const timeExtraEl = document.getElementById("time-extra");
+const wordGridEl = document.getElementById("word-grid");
 const langSelect = document.getElementById("lang-select");
 const themeSelect = document.getElementById("theme-select");
 const wallpaperInput = document.getElementById("wallpaper-input");
 const wallpaperEl = document.getElementById("wallpaper");
 const clearBtn = document.getElementById("clear-wallpaper");
+const settingsBtn = document.getElementById("settings-btn");
+const settingsPanel = document.getElementById("settings-panel");
 
 // Populate dropdowns
 languages.forEach((lang, i) => {
@@ -97,9 +100,27 @@ wallpaperInput.addEventListener("change", function () {
 
 clearBtn.addEventListener("click", removeWallpaper);
 
+// Settings panel toggle
+function toggleSettings() {
+  const isOpen = settingsPanel.classList.contains("open");
+  if (isOpen) {
+    settingsPanel.classList.remove("open");
+    settingsPanel.addEventListener("transitionend", function handler() {
+      settingsPanel.hidden = true;
+      settingsPanel.removeEventListener("transitionend", handler);
+    });
+  } else {
+    settingsPanel.hidden = false;
+    requestAnimationFrame(() => settingsPanel.classList.add("open"));
+  }
+}
+
+settingsBtn.addEventListener("click", toggleSettings);
+
 // Events
 langSelect.addEventListener("change", () => {
   localStorage.setItem(LANG_KEY, langSelect.value);
+  currentGridLang = -1;
   lastMinute = -1;
   updateDisplay();
 });
@@ -108,6 +129,48 @@ themeSelect.addEventListener("change", () => {
   localStorage.setItem(THEME_KEY, themeSelect.value);
   applyAppearance();
 });
+
+// Word grid rendering
+let gridCells = [];  // span elements [row][col]
+let currentGridLang = -1;
+
+function buildGrid(lang) {
+  wordGridEl.innerHTML = "";
+  gridCells = [];
+
+  const rows = lang.grid.letters;
+  // Detect word-mode grids (array-of-arrays vs string rows)
+  const isWordMode = Array.isArray(rows[0]);
+  wordGridEl.classList.toggle("word-mode", isWordMode);
+
+  for (let r = 0; r < rows.length; r++) {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "grid-row";
+    const rowCells = [];
+    for (let c = 0; c < rows[r].length; c++) {
+      const span = document.createElement("span");
+      span.className = "grid-cell";
+      span.textContent = rows[r][c];
+      rowDiv.appendChild(span);
+      rowCells.push(span);
+    }
+    wordGridEl.appendChild(rowDiv);
+    gridCells.push(rowCells);
+  }
+
+}
+
+function updateGrid(lang, h, m) {
+  const litSet = new Set();
+  const cells = lang.grid.highlight(h, m);
+  for (const pos of cells) litSet.add(pos[0] + "," + pos[1]);
+
+  for (let r = 0; r < gridCells.length; r++) {
+    for (let c = 0; c < gridCells[r].length; c++) {
+      gridCells[r][c].classList.toggle("lit", litSet.has(r + "," + c));
+    }
+  }
+}
 
 // Update loop
 let lastMinute = -1;
@@ -119,11 +182,33 @@ function updateDisplay() {
 
   if (m !== lastMinute) {
     lastMinute = m;
-    const lang = languages[langSelect.value];
-    if (lang) {
+    const langIdx = parseInt(langSelect.value);
+    const lang = languages[langIdx];
+    if (!lang) return;
+
+    if (lang.grid) {
+      // Word clock grid mode
+      if (currentGridLang !== langIdx) {
+        buildGrid(lang);
+        currentGridLang = langIdx;
+      }
+      wordGridEl.hidden = false;
+      timeTextEl.style.display = "none";
+      timeExtraEl.style.display = "";
+      updateGrid(lang, h, m);
+      // Show extra minutes text from format()
+      const result = lang.format(h, m);
+      let extra = result.extra || "";
+      extra = extra.replace(/^-/, "+");
+      timeExtraEl.textContent = extra;
+    } else {
+      // Text mode (fallback for non-grid languages)
+      wordGridEl.hidden = true;
+      timeTextEl.style.display = "";
+      timeExtraEl.style.display = "";
+      currentGridLang = -1;
       const result = lang.format(h, m);
       timeTextEl.textContent = result.main;
-      // Always show extra offset as positive
       let extra = result.extra || "";
       extra = extra.replace(/^-/, "+");
       timeExtraEl.textContent = extra;
